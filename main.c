@@ -15,13 +15,14 @@
 Test Code Definitions
 */
 
+/*
 #define Btn BIT3                            // Define "Btn" as bit 3.
 #define LED BIT0                            // Define "LED0" as bit 0.
 #define PnB (P1IN & Btn)                    // Define "INP" for checking if there is an input on pin 1.3.
 typedef int bool;
 #define true 1
 #define false 0
-
+*/
 
 /*
  * Code Definition
@@ -31,7 +32,7 @@ typedef int bool;
 #define GreenLED    BIT2;
 #define BlueLED     BIT3;
 
-int ByteCount = 0;
+volatile int ByteCount = 0;
 void TimerSetup(int rate);
 void UARTSetup();
 
@@ -92,8 +93,11 @@ void LEDSetup()
 void TimerSetup(int rate)                   // Subject to change
 {
 	CCTL0 = CCIE;
-	TA0CTL = TASSEL_2 + MC_1 + ID_2;        // SMCLK/4, Up
+	TA0CTL = TASSEL_2 + MC_1 + ID_0;        // SMCLK divided by 1, Up
 	TA0CCR0 = 125000 / rate;                // 250000 / 10 = 25000, (10^6 [Hz] / 4) / (25000) = 10Hz
+	TA0CCTL1 = OUTMOD_7; 					// Reset or Set behavior
+	TA0CCTL2 = OUTMOD_7; 					// Reset or Set behavior
+	TA0CCTL3 = OUTMOD_7; 					// Reset or Set behavior
 }
 
 
