@@ -4,6 +4,9 @@
 /**
  * main.c
  */
+
+
+int ByteCount
 void UARTSetup();
 int main(void)
 {
@@ -24,4 +27,26 @@ void UARTSetup(){//Code from Lab 0 example code
     UCA0MCTL = UCBRS0;                        // Modulation UCBRSx = 1
     UCA0CTL1 &= ~UCSWRST;                     // **Initialize USCI state machine**
     IE2 |= UCA0RXIE;                          // Enable USCI_A0 RX interrupt
+}
+
+
+#pragma vector=USCI_A0_VECTOR               //Interrupt Vector definition
+__interupt void USCI_A0_ISR(void){          //Interrupt function deceleration
+    switch(ByteCount){
+    case 0:
+        //calculate and send package size
+    break;
+    case 1:
+        //Set Red LED
+    break;
+    case 2:
+        //Set Green LED
+    break;
+    case 3;
+        //Set Blue LED
+    break;
+    default:
+        //send the rest of the package
+    break;
+    }
 }
