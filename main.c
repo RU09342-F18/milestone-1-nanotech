@@ -11,8 +11,10 @@
 
 #define RedLED      BIT1;
 #define GreenLED    BIT2;
-#define BlueLED     BIT3; 
+#define BlueLED     BIT3;
 
+int ByteCount = 0;
+void TimerSetup(int rate);
 void UARTSetup();
 int main(void)
 {
@@ -33,4 +35,31 @@ void UARTSetup(){//Code from Lab 0 example code
     UCA0MCTL = UCBRS0;                        // Modulation UCBRSx = 1
     UCA0CTL1 &= ~UCSWRST;                     // **Initialize USCI state machine**
     IE2 |= UCA0RXIE;                          // Enable USCI_A0 RX interrupt
+}
+
+void TimerSetup(int rate){//Subject to change
+    CCTL0 = CCIE;
+    TA0CTL = TASSEL_2 + MC_1 + ID_2; // SMCLK/4, Up
+    TA0CCR0 = 125000 / rate; // 250000 / 10 = 25000, (10^6 [Hz] / 4) / (25000) = 10Hz
+}
+
+#pragma vector=USCI_A0_VECTOR               //Interrupt Vector definition
+__interupt void USCI_A0_ISR(void){          //Interrupt function deceleration
+    switch(ByteCount){
+    case 0:
+        //calculate and send package size
+    break;
+    case 1:
+        //Set Red LED
+    break;
+    case 2:
+        //Set Green LED
+    break;
+    case 3;
+        //Set Blue LED
+    break;
+    default:
+        //send the rest of the package
+    break;
+    }
 }
