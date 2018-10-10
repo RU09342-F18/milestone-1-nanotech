@@ -30,7 +30,7 @@ void UARTSetup();
 
 int main(void)
 {
-	WDTCTL = WDTPW | WDTHOLD;	            // stop watchdog timer
+	WDTCTL = WDTPW | WDTHOLD;	            // Stop watchdog timer
 	UARTSetup();
 	return 0;
 }
@@ -60,7 +60,7 @@ void UARTSetup()                            //Code from Lab 0 example code
  * Timer Setup
  */
 
-void TimerSetup(int rate)                   //Subject to change
+void TimerSetup(int rate)                   // Subject to change
 {
     CCTL0 = CCIE;
     TA0CTL = TASSEL_2 + MC_1 + ID_2;        // SMCLK/4, Up
@@ -72,24 +72,24 @@ void TimerSetup(int rate)                   //Subject to change
  * UART Interrupt
  */
 
-#pragma vector=USCI_A0_VECTOR               //Interrupt Vector definition
-__interupt void USCI_A0_ISR(void)           //Interrupt function deceleration
+#pragma vector=USCI_A0_VECTOR               // Interrupt Vector definition
+__interupt void USCI_A0_ISR(void)           // Interrupt function deceleration
 {       
     switch(ByteCount)
     {
-        case 0:                                 //calculate and send package size
+        case 0:                             // Calculate and send package size
             
             break;
-        case 1:                                 //Set Red LED
+        case 1:                             // Set Red LED
             
             break;
-        case 2:                                 //Set Green LED
+        case 2:                             // Set Green LED
 
             break;
-        case 3;                                 //Set Blue LED
+        case 3;                             // Set Blue LED
             
             break;
-        default:                                //send the rest of the package
+        default:                            // Send the rest of the package
             
             break;
     }
