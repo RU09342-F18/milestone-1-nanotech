@@ -1,9 +1,18 @@
-#include <msp430.h> 
-
-
-/**
- * main.c
+/*
+ * main.c for Milestone
+ * 
+*    Created on: October 10, 2018
+ *  Last Edited: 
+ *       Author: Tyler M. and Helen P.
+ *        Board: MSP430G2553
  */
+
+#include <msp430.h>
+
+#define RedLED      BIT1;
+#define GreenLED    BIT2;
+#define BlueLED     BIT3; 
+
 void UARTSetup();
 int main(void)
 {
