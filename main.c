@@ -6,7 +6,7 @@
  */
 
 
-int ByteCount
+int ByteCount = 0;
 void UARTSetup();
 int main(void)
 {
