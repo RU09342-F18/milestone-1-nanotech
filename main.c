@@ -7,6 +7,7 @@
 
 
 int ByteCount = 0;
+void TimerSetup(int rate);
 void UARTSetup();
 int main(void)
 {
@@ -29,6 +30,11 @@ void UARTSetup(){//Code from Lab 0 example code
     IE2 |= UCA0RXIE;                          // Enable USCI_A0 RX interrupt
 }
 
+void TimerSetup(int rate){//Subject to change
+    CCTL0 = CCIE;
+    TA0CTL = TASSEL_2 + MC_1 + ID_2; // SMCLK/4, Up
+    TA0CCR0 = 125000 / rate; // 250000 / 10 = 25000, (10^6 [Hz] / 4) / (25000) = 10Hz
+}
 
 #pragma vector=USCI_A0_VECTOR               //Interrupt Vector definition
 __interupt void USCI_A0_ISR(void){          //Interrupt function deceleration
