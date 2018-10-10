@@ -15,9 +15,9 @@
 Test Code Definitions
 */
 
-#define Btn BIT3                 //Define "Btn" as bit 3.
-#define LED BIT0                   //Define "LED0" as bit 0.
-#define PnB (P1IN & Btn)        //Define "INP" for checking if there is an input on pin 1.3.
+#define Btn BIT3                            // Define "Btn" as bit 3.
+#define LED BIT0                            // Define "LED0" as bit 0.
+#define PnB (P1IN & Btn)                    // Define "INP" for checking if there is an input on pin 1.3.
 typedef int bool;
 #define true 1
 #define false 0
@@ -43,14 +43,15 @@ void UARTSetup();
 int main(void)
 {
 	WDTCTL = WDTPW | WDTHOLD;	            // Stop watchdog timer
-	UARTSetup();
-	//TestCode();
+	UARTSetup();                            // UARTSetup Function
+    LEDSetup();                             // LEDSetup Function
+	//TestCode();                           // TestCode Function
 	return 0;
 }
 
 
 /*
- * UART Setup
+ * Setting UART
  */
 
 void UARTSetup()                            //Code from Lab 0 example code
@@ -70,7 +71,22 @@ void UARTSetup()                            //Code from Lab 0 example code
 
 
 /*
- * Timer Setup
+ * Setting LEDs
+ */
+
+void LEDSetup()
+{
+    P1DIR |= RedLED;                        // P1.1 to output
+    P1SEL |= RedLED;                        // P1.1 to TA0.1
+    P1DIR |= GreenLED;                      // P1.2 to output
+    P1SEL |= GreenLED;                      // P1.2 to TA0.2
+    P1DIR |= BlueLED;                       // P1.3 to output
+    P1SEL |= BlueLED;                       // P1.3 to TA0.3
+}
+
+
+/*
+ * Setting Timer
  */
 
 void TimerSetup(int rate)                   // Subject to change
@@ -82,7 +98,7 @@ void TimerSetup(int rate)                   // Subject to change
 
 
 /*
- * UART Interrupt
+ * Setting UART Interrupt
  */
 
 #pragma vector=USCI_A0_VECTOR               // Interrupt Vector definition
