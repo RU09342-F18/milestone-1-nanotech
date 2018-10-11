@@ -28,13 +28,15 @@ typedef int bool;
  * Code Definition
  */
 
-#define RedLED      BIT1;
-#define GreenLED    BIT2;
-#define BlueLED     BIT3;
+#define RedLED      BIT3;
+#define GreenLED    BIT4;
+#define BlueLED     BIT5;
 
 volatile int ByteCount = 0;
-void TimerSetup(int rate);
+
 void UARTSetup();
+void LEDSetup();
+void TimerSetup(int rate);
 
 
 /*
