@@ -62,8 +62,8 @@ void UARTSetup()                            //Code from Lab 0 example code
 	DCOCTL = 0;                             // Select lowest DCOx and MODx settings
 	BCSCTL1 = CALBC1_1MHZ;                  // Set DCO
 	DCOCTL = CALDCO_1MHZ;
-	P1SEL = RedLED + GreenLED;              // P1.1 = RXD, P1.2=TXD
-	P1SEL2 = RedLED + GreenLED;             // P1.1 = RXD, P1.2=TXD
+	P1SEL = RedLED + GreenLED;              // P2.3 = RXD, P2.4=TXD
+	P1SEL2 = RedLED + GreenLED;             // P2.3 = RXD, P2.4=TXD
 	UCA0CTL1 |= UCSSEL_2;                   // SMCLK
 	UCA0BR0 = 104;                          // 1MHz 9600
 	UCA0BR1 = 0;                            // 1MHz 9600
@@ -79,12 +79,12 @@ void UARTSetup()                            //Code from Lab 0 example code
 
 void LEDSetup()
 {
-    P1DIR |= RedLED;                        // P1.1 to output
-    P1SEL |= RedLED;                        // P1.1 to TA0.1
-    P1DIR |= GreenLED;                      // P1.2 to output
-    P1SEL |= GreenLED;                      // P1.2 to TA0.2
-    P1DIR |= BlueLED;                       // P1.3 to output
-    P1SEL |= BlueLED;                       // P1.3 to TA0.3
+    P1DIR |= RedLED;                        // P2.3 to output
+    P1SEL |= RedLED;                        // P2.3 to TA0.1
+    P1DIR |= GreenLED;                      // P2.4 to output
+    P1SEL |= GreenLED;                      // P2.4 to TA0.2
+    P1DIR |= BlueLED;                       // P2.5 to output
+    P1SEL |= BlueLED;                       // P2.5 to TA0.3
 }
 
 
