@@ -112,7 +112,7 @@ __interupt void USCI_A0_ISR(void)           // Interrupt function deceleration
 {       
     switch(ByteCount)
     {
-        case 0:                             // Calculate and send package size
+        case 0:                             // Calculate
             
             break;
         case 1:                             // Set Red LED
@@ -121,7 +121,7 @@ __interupt void USCI_A0_ISR(void)           // Interrupt function deceleration
         case 2:                             // Set Green LED
 
             break;
-        case 3;                             // Set Blue LED
+        case 3;                             // Set Blue LED and send package size
             
             break;
         default:                            // Send the rest of the package
