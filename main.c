@@ -84,12 +84,12 @@ void UARTSetup()                            //Code from Lab 0 example code
 
 void LEDSetup()
 {
-    P1DIR |= RedLED;                        // P2.3 to output
-    P1SEL |= RedLED;                        // P2.3 to TA0.1
-    P1DIR |= GreenLED;                      // P2.4 to output
-    P1SEL |= GreenLED;                      // P2.4 to TA0.2
-    P1DIR |= BlueLED;                       // P2.5 to output
-    P1SEL |= BlueLED;                       // P2.5 to TA0.3
+    P2DIR |= RedLED;                        // P2.3 to output
+    P2SEL |= RedLED;                        // P2.3 to TA0.1
+    P2DIR |= GreenLED;                      // P2.4 to output
+    P2SEL |= GreenLED;                      // P2.4 to TA0.2
+    P2DIR |= BlueLED;                       // P2.5 to output
+    P2SEL |= BlueLED;                       // P2.5 to TA0.3
 }
 
 
@@ -115,6 +115,7 @@ void TimerSetup(int rate)                   // Subject to change
 
 //#pragma vector=USCI_A0_VECTOR               // Interrupt Vector definition
 //__interupt void USCI_A0_ISR(void)           // Interrupt function deceleration
+
 #pragma vector=USCIAB0RX_VECTOR
 __interrupt void USCI0RX_ISR(void)
 {       
@@ -122,21 +123,21 @@ __interrupt void USCI0RX_ISR(void)
 
           switch(CurrentByte){
           case 0:
-              NumberOfBytes = UCA0RXBUF;        //first byte received
+              NumberOfBytes = UCA0RXBUF;	  // first byte received
               break;
           case 1:
-              TA0CCR1 = 255 - UCA0RXBUF;           //red LED value
+              TA0CCR1 = 255 - UCA0RXBUF;	  // red LED value
               break;
           case 2:
-              TA1CCR1 = 255 -UCA0RXBUF;           //green LED value
+              TA1CCR1 = 255 -UCA0RXBUF;       // green LED value
               break;
           case 3:
-              TA1CCR2 = 255 - UCA0RXBUF;           //blue LED value
-              UCA0TXBUF = numOfBytes-3;     //send new numBytes
+              TA1CCR2 = 255 - UCA0RXBUF;      // blue LED value
+              UCA0TXBUF = numOfBytes-3;       // send new numBytes
               break;
           default:
               if(CurrentByte<NumberOfBytes){
-                  UCA0TXBUF = temp;         //send remaining bytes
+                  UCA0TXBUF = temp;           // send remaining bytes
               }
           }
           CurrentByte++;
