@@ -38,6 +38,7 @@ void UARTSetup();
 void LEDSetup();
 void TimerSetup(int rate);
 
+int NumberOfBytes = 0;
 
 /*
  * Main Function
@@ -107,26 +108,34 @@ void TimerSetup(int rate)                   // Subject to change
  * Setting UART Interrupt
  */
 
-#pragma vector=USCI_A0_VECTOR               // Interrupt Vector definition
-__interupt void USCI_A0_ISR(void)           // Interrupt function deceleration
+//#pragma vector=USCI_A0_VECTOR               // Interrupt Vector definition
+//__interupt void USCI_A0_ISR(void)           // Interrupt function deceleration
+#pragma vector=USCIAB0RX_VECTOR
+__interrupt void USCI0RX_ISR(void)
 {       
-    switch(ByteCount)
-    {
-        case 0:                             // Calculate
-            
-            break;
-        case 1:                             // Set Red LED
-            
-            break;
-        case 2:                             // Set Green LED
+    while (!(IFG2&UCA0TXIFG)){                // USCI_A0 TX buffer ready?
 
-            break;
-        case 3;                             // Set Blue LED and send package size
-            
-            break;
-        default:                            // Send the rest of the package
-            
-            break;
+      temp = UCA0RXBUF;
+          switch(byteCount){
+          case 0:
+              numOfBytes = temp;        //first byte received
+              break;
+          case 1:
+              TA0CCR1 = temp;           //red LED value
+              break;
+          case 2:
+              TA1CCR1 = temp;           //green LED value
+              break;
+          case 3:
+              TA1CCR2 = temp;           //blue LED value
+              UCA0TXBUF = numOfBytes-3;     //send new numBytes
+              break;
+          default:
+              if(byteCount<numOfBytes){
+                  UCA0TXBUF = temp;         //send remaining bytes
+              }
+          }
+          byteCount++;
     }
 }
 
