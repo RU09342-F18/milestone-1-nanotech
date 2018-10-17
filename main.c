@@ -47,8 +47,8 @@ int CurrentByte = 0;
 
 int main(void)
 {
-	WDTCTL = WDTPW | WDTHOLD;	            // Stop watchdog timer
-	UARTSetup();                            // UARTSetup Function
+	WDTCTL = WDTPW | WDTHOLD;				// Stop watchdog timer
+	UARTSetup();                           	// UARTSetup Function
     LEDSetup();                             // LEDSetup Function
 	//TestCode();                           // TestCode Function
 
@@ -62,9 +62,9 @@ int main(void)
  * Setting UART
  */
 
-void UARTSetup()                            //Code from Lab 0 example code
+void UARTSetup()                            // Code from Lab 0 example code
 {
-	DCOCTL = 0;                             // Select lowest DCOx and MODx settings
+	DCOCTL = 0;                           	// Select lowest DCOx and MODx settings
 	BCSCTL1 = CALBC1_1MHZ;                  // Set DCO
 	DCOCTL = CALDCO_1MHZ;
 	P2SEL = RedLED + GreenLED;              // P2.3 = RXD, P2.4 = TXD
@@ -73,7 +73,7 @@ void UARTSetup()                            //Code from Lab 0 example code
 	UCA0BR0 = 104;                          // 1MHz 9600
 	UCA0BR1 = 0;                            // 1MHz 9600
 	UCA0MCTL = UCBRS0;                      // Modulation UCBRSx = 1
-	UCA0CTL1 &= ~UCSWRST;                   // **Initialize USCI state machine**
+	UCA0CTL1 &= ~UCSWRST;                   // Initialize USCI state machine
 	IE2 |= UCA0RXIE;                        // Enable USCI_A0 RX interrupt
 }
 
@@ -84,7 +84,7 @@ void UARTSetup()                            //Code from Lab 0 example code
 
 void LEDSetup()
 {
-    P2DIR |= RedLED;                        // P2.3 to output
+    P2DIR |= RedLED;                       	// P2.3 to output
     P2SEL |= RedLED;                        // P2.3 to TA0.1
     P2DIR |= GreenLED;                      // P2.4 to output
     P2SEL |= GreenLED;                      // P2.4 to TA0.2
@@ -97,7 +97,7 @@ void LEDSetup()
  * Setting Timer
  */
 
-void TimerSetup(int rate)                   // Subject to change
+void TimerSetup(int rate)                  	// Subject to change
 {
 	CCTL0 = CCIE;
 	TA0CTL = TASSEL_2 + MC_1 + ID_0;        // SMCLK divided by 1, Up
@@ -113,31 +113,31 @@ void TimerSetup(int rate)                   // Subject to change
  * Setting UART Interrupt
  */
 
-//#pragma vector=USCI_A0_VECTOR               // Interrupt Vector definition
-//__interupt void USCI_A0_ISR(void)           // Interrupt function deceleration
+//#pragma vector=USCI_A0_VECTOR           	// Interrupt Vector definition
+//__interupt void USCI_A0_ISR(void)         // Interrupt function deceleration
 
 #pragma vector=USCIAB0RX_VECTOR
 __interrupt void USCI0RX_ISR(void)
 {       
-    while (!(IFG2&UCA0TXIFG)){                // USCI_A0 TX buffer ready?
+    while (!(IFG2&UCA0TXIFG)){              // USCI_A0 TX buffer ready?
 
           switch(CurrentByte){
           case 0:
-              NumberOfBytes = UCA0RXBUF;	  // first byte received
+              NumberOfBytes = UCA0RXBUF;	// first byte received
               break;
           case 1:
-              TA0CCR1 = 255 - UCA0RXBUF;	  // red LED value
+              TA0CCR1 = 255 - UCA0RXBUF;	// red LED value
               break;
           case 2:
-              TA1CCR1 = 255 -UCA0RXBUF;       // green LED value
+              TA1CCR1 = 255 -UCA0RXBUF;     // green LED value
               break;
           case 3:
-              TA1CCR2 = 255 - UCA0RXBUF;      // blue LED value
-              UCA0TXBUF = numOfBytes-3;       // send new numBytes
+              TA1CCR2 = 255 - UCA0RXBUF;    // blue LED value
+              UCA0TXBUF = numOfBytes-3;     // send new numBytes
               break;
           default:
               if(CurrentByte<NumberOfBytes){
-                  UCA0TXBUF = temp;           // send remaining bytes
+                  UCA0TXBUF = temp;         // send remaining bytes
               }
           }
           CurrentByte++;
