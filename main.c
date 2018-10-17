@@ -49,6 +49,9 @@ int main(void)
 	UARTSetup();                            // UARTSetup Function
     LEDSetup();                             // LEDSetup Function
 	//TestCode();                           // TestCode Function
+
+	__bis_SR_register(LPM0_bits + GIE); 	// Low-Power Mode 0 and Global Interrupt Enable
+
 	return 0;
 }
 
@@ -96,7 +99,8 @@ void TimerSetup(int rate)                   // Subject to change
 {
 	CCTL0 = CCIE;
 	TA0CTL = TASSEL_2 + MC_1 + ID_0;        // SMCLK divided by 1, Up
-	TA0CCR0 = 125000 / rate;                // 250000 / 10 = 25000, (10^6 [Hz] / 4) / (25000) = 10Hz
+	// TA0CCR0 = 125000 / rate;             // 250000 / 10 = 25000, (10^6 [Hz] / 4) / (25000) = 10Hz
+	TA0CCR0  = 0x00FF;                  	// Sets CCR0 to 255
 	TA0CCTL1 = OUTMOD_7; 					// Reset or Set behavior
 	TA0CCTL2 = OUTMOD_7; 					// Reset or Set behavior
 	TA0CCTL3 = OUTMOD_7; 					// Reset or Set behavior
