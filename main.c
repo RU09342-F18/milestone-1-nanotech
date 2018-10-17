@@ -117,16 +117,16 @@ __interrupt void USCI0RX_ISR(void)
 
           switch(byteCount){
           case 0:
-              numOfBytes = UCA0RXBUF;        //first byte received
+              numOfBytes = 255 -UCA0RXBUF;        //first byte received
               break;
           case 1:
-              TA0CCR1 = UCA0RXBUF;           //red LED value
+              TA0CCR1 = 255 - UCA0RXBUF;           //red LED value
               break;
           case 2:
-              TA1CCR1 = UCA0RXBUF;           //green LED value
+              TA1CCR1 = 255 -UCA0RXBUF;           //green LED value
               break;
           case 3:
-              TA1CCR2 = UCA0RXBUF;           //blue LED value
+              TA1CCR2 = 255 - UCA0RXBUF;           //blue LED value
               UCA0TXBUF = numOfBytes-3;     //send new numBytes
               break;
           default:
