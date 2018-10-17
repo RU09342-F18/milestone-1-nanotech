@@ -67,8 +67,8 @@ void UARTSetup()                            // Code from Lab 0 example code
 	DCOCTL = 0;                           	// Select lowest DCOx and MODx settings
 	BCSCTL1 = CALBC1_1MHZ;                  // Set DCO
 	DCOCTL = CALDCO_1MHZ;
-	P2SEL = RedLED + GreenLED;              // P2.3 = RXD, P2.4 = TXD
-	P2SEL2 = RedLED + GreenLED;             // P2.3 = RXD, P2.4 = TXD
+	P2SEL = RedLED + GreenLED + BlueLED;              // P2.3 = RXD, P2.4 = TXD
+	P2SEL2 = RedLED + GreenLED + BlueLED;             // P2.3 = RXD, P2.4 = TXD
 	UCA0CTL1 |= UCSSEL_2;                   // SMCLK
 	UCA0BR0 = 104;                          // 1MHz 9600
 	UCA0BR1 = 0;                            // 1MHz 9600
@@ -105,7 +105,6 @@ void TimerSetup(int rate)                  	// Subject to change
 	TA0CCR0  = 0x00FF;                  	// Sets CCR0 to 255
 	TA0CCTL1 = OUTMOD_7; 					// Reset or Set behavior
 	TA0CCTL2 = OUTMOD_7; 					// Reset or Set behavior
-	TA0CCTL3 = OUTMOD_7; 					// Reset or Set behavior
 }
 
 
@@ -132,12 +131,12 @@ __interrupt void USCI0RX_ISR(void)
               TA1CCR1 = 255 -UCA0RXBUF;     // green LED value
               break;
           case 3:
-              TA1CCR2 = 255 - UCA0RXBUF;    // blue LED value
-              UCA0TXBUF = numOfBytes-3;     // send new numBytes
+              TA1CCR2 = 255 - UCA0RXBUF;      // blue LED value
+              UCA0TXBUF = NumberOfBytes - 3;       // send new numBytes
               break;
           default:
               if(CurrentByte<NumberOfBytes){
-                  UCA0TXBUF = temp;         // send remaining bytes
+                  UCA0TXBUF = UCA0RXBUF;           // send remaining bytes
               }
           }
           CurrentByte++;
