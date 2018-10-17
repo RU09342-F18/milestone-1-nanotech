@@ -103,6 +103,8 @@ void TimerSetup(int rate)                  	// Subject to change
 	TA0CCR0  = 0x00FF;                  	// Sets CCR0 to 255
 	TA0CCTL1 = OUTMOD_7; 					// Reset or Set behavior
 	TA0CCTL2 = OUTMOD_7; 					// Reset or Set behavior
+	TA1CCR0  = 0x00FF;                      // Sets CCR0 to 255
+	TA1CCTL1 = OUTMOD_7;                    // Reset or Set behavior
 }
 
 
