@@ -38,6 +38,8 @@ void UARTSetup();
 void LEDSetup();
 void TimerSetup(int rate);
 
+int NumberOfBytes = 0;
+int CurrentByte = 0;
 
 /*
  * Main Function
@@ -65,8 +67,8 @@ void UARTSetup()                            //Code from Lab 0 example code
 	DCOCTL = 0;                             // Select lowest DCOx and MODx settings
 	BCSCTL1 = CALBC1_1MHZ;                  // Set DCO
 	DCOCTL = CALDCO_1MHZ;
-	P1SEL = RedLED + GreenLED;              // P1.1 = RXD, P1.2=TXD
-	P1SEL2 = RedLED + GreenLED;             // P1.1 = RXD, P1.2=TXD
+	P1SEL = RedLED + GreenLED;              // P2.3 = RXD, P2.4=TXD
+	P1SEL2 = RedLED + GreenLED;             // P2.3 = RXD, P2.4=TXD
 	UCA0CTL1 |= UCSSEL_2;                   // SMCLK
 	UCA0BR0 = 104;                          // 1MHz 9600
 	UCA0BR1 = 0;                            // 1MHz 9600
@@ -82,12 +84,12 @@ void UARTSetup()                            //Code from Lab 0 example code
 
 void LEDSetup()
 {
-    P1DIR |= RedLED;                        // P1.1 to output
-    P1SEL |= RedLED;                        // P1.1 to TA0.1
-    P1DIR |= GreenLED;                      // P1.2 to output
-    P1SEL |= GreenLED;                      // P1.2 to TA0.2
-    P1DIR |= BlueLED;                       // P1.3 to output
-    P1SEL |= BlueLED;                       // P1.3 to TA0.3
+    P1DIR |= RedLED;                        // P2.3 to output
+    P1SEL |= RedLED;                        // P2.3 to TA0.1
+    P1DIR |= GreenLED;                      // P2.4 to output
+    P1SEL |= GreenLED;                      // P2.4 to TA0.2
+    P1DIR |= BlueLED;                       // P2.5 to output
+    P1SEL |= BlueLED;                       // P2.5 to TA0.3
 }
 
 
@@ -111,26 +113,33 @@ void TimerSetup(int rate)                   // Subject to change
  * Setting UART Interrupt
  */
 
-#pragma vector=USCI_A0_VECTOR               // Interrupt Vector definition
-__interupt void USCI_A0_ISR(void)           // Interrupt function deceleration
+//#pragma vector=USCI_A0_VECTOR               // Interrupt Vector definition
+//__interupt void USCI_A0_ISR(void)           // Interrupt function deceleration
+#pragma vector=USCIAB0RX_VECTOR
+__interrupt void USCI0RX_ISR(void)
 {       
-    switch(ByteCount)
-    {
-        case 0:                             // Calculate and send package size
-            
-            break;
-        case 1:                             // Set Red LED
-            
-            break;
-        case 2:                             // Set Green LED
+    while (!(IFG2&UCA0TXIFG)){                // USCI_A0 TX buffer ready?
 
-            break;
-        case 3;                             // Set Blue LED
-            
-            break;
-        default:                            // Send the rest of the package
-            
-            break;
+          switch(CurrentByte){
+          case 0:
+              NumberOfBytes = UCA0RXBUF;        //first byte received
+              break;
+          case 1:
+              TA0CCR1 = 255 - UCA0RXBUF;           //red LED value
+              break;
+          case 2:
+              TA1CCR1 = 255 -UCA0RXBUF;           //green LED value
+              break;
+          case 3:
+              TA1CCR2 = 255 - UCA0RXBUF;           //blue LED value
+              UCA0TXBUF = numOfBytes-3;     //send new numBytes
+              break;
+          default:
+              if(CurrentByte<NumberOfBytes){
+                  UCA0TXBUF = temp;         //send remaining bytes
+              }
+          }
+          CurrentByte++;
     }
 }
 
