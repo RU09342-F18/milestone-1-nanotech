@@ -93,6 +93,7 @@ void LEDSetup()
     P2SEL2 = 0x00;
     P2DIR |= BlueLED;                       // P2.4 to output
     P2SEL |= BlueLED;                       // P2.4 to TA0.3
+
 }
 
 
