@@ -124,9 +124,8 @@ void TimerSetup(int rate)                  	// Subject to change
 #pragma vector=USCIAB0RX_VECTOR
 __interrupt void USCI0RX_ISR(void)
 {
-    while (!(IFG2&UCA0TXIFG)){              // USCI_A0 TX buffer ready?
+    while (!(IFG2&UCA0TXIFG))            // USCI_A0 TX buffer ready?
 
-          switch(CurrentByte){
           case 0:
               NumberOfBytes = UCA0RXBUF;	// first byte received
               break;
@@ -146,7 +145,7 @@ __interrupt void USCI0RX_ISR(void)
               }
           }
           CurrentByte++;
-    }
+
 }
 
 
