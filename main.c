@@ -50,7 +50,6 @@ int main(void)
     WDTCTL = WDTPW | WDTHOLD;                   // Stop watchdog timer
     UARTSetup();                                // UARTSetup Function
     LEDSetup();                                 // LEDSetup Function
-    //TestCode();                               // TestCode Function
     UCA0TXBUF = 0xAA;
     __bis_SR_register(GIE);
     UCA0TXBUF = 0xAB;
@@ -133,7 +132,6 @@ void __attribute__ ((interrupt(USCIAB0RX_VECTOR))) USCI0RX_ISR (void)
 {
     while (!(IFG2&UCA0TXIFG));                // USCI_A0 TX buffer ready?
     UCA0TXBUF = UCA0RXBUF;                    // TX -> RXed character
-    /*
         switch(CurrentByte){
             case 0:
                 NumberOfBytes = UCA0RXBUF;      // first byte received
