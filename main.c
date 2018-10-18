@@ -50,9 +50,7 @@ int main(void)
     WDTCTL = WDTPW | WDTHOLD;                   // Stop watchdog timer
     UARTSetup();                                // UARTSetup Function
     LEDSetup();                                 // LEDSetup Function
-    UCA0TXBUF = 0xAA;
     __bis_SR_register(GIE);
-    UCA0TXBUF = 0xAB;
     while(1);
 
     return 0;
