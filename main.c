@@ -38,8 +38,8 @@ void UARTSetup();
 void LEDSetup();
 void TimerSetup();
 
-int NumberOfBytes = 0;
-int CurrentByte = 0;
+char NumberOfBytes = 0;
+char CurrentByte = 0;
 
 /*
  * Main Function
@@ -142,37 +142,14 @@ void __attribute__ ((interrupt(USCIAB0RX_VECTOR))) USCI0RX_ISR (void)
                 break;
             default:
                 if(CurrentByte<NumberOfBytes){
-                    UCA0TXBUF = UCA0RXBUF;      // send remaining bytes
+                    UCA0TXBUF = TA1CCR2 << 8 ;      // send remaining bytes
+                if(CurrentByte == NumberOfBytes - 1){
+                    CurrentByte = 0;
                 }
-            }
+
+                }
+        }
         CurrentByte++;
 
 }
 
-
-/* LED Test Code
-P1.0 Will SWITCH when you push the button, use this to test LEDs
-void TestCode()
-{
-    WDTCTL = WDTPW | WDTHOLD;                   // Stop watchdog timer
-    bool i = 0;                                 // Create a boolean called "i"
-    P1SEL &= (~LED & ~Btn);                     // On P1 Select, set bits "0" and "3" to the value "0"
-    P1DIR |= LED;                               // Set Port 1.0 as an output
-    P1OUT &= ~LED;                              // Set the initial value of port 1.0 as "0"
-    P1DIR &= ~Btn;                              // Set Port 1.3 as an input
-    P1REN |= Btn;                               // Turn on the pull-up resistor for port 1.3
-    P1OUT |= Btn;                               // Set the initial value of port 1.3 as "1"
-    while(1)                                    // Start an infinite while loop.
-    {
-        if(!PnB && !i)                          // If the button is pushed and the boolean is false
-        {
-                    P1OUT ^= LED;               // Flip the value of the LED
-                    i = 1;                      // Flip the Value of the Boolean
-        }
-        else if(PnB && i)                       // If the button is pushed and the boolean is true
-        {
-                   i = 0;                       // Set the Boolean to be true
-        }
-    }
-}
-*/
