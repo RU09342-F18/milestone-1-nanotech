@@ -129,7 +129,6 @@ void __attribute__ ((interrupt(USCIAB0RX_VECTOR))) USCI0RX_ISR (void)
         switch(CurrentByte){
             case 0:
                 NumberOfBytes = UCA0RXBUF;      // first byte received
-                UCA0TXBUF = UCA0RXBUF;      // Remove Later
                 break;
             case 1:
                 TA0CCR1 = 255 - UCA0RXBUF;      // red LED value
