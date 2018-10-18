@@ -50,6 +50,7 @@ int main(void)
     WDTCTL = WDTPW | WDTHOLD;                   // Stop watchdog timer
     UARTSetup();                                // UARTSetup Function
     LEDSetup();                                 // LEDSetup Function
+    TimerSetup();
     __bis_SR_register(GIE);
     while(1);
 
@@ -146,7 +147,7 @@ void __attribute__ ((interrupt(USCIAB0RX_VECTOR))) USCI0RX_ISR (void)
                 }
             }
         CurrentByte++;
-*/
+
 }
 
 
