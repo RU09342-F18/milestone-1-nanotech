@@ -100,7 +100,7 @@ void LEDSetup()
 
 void TimerSetup()                       // Subject to change
 {
-    CCTL0 = CCIE;
+
     TA0CTL = TASSEL_2 + MC_1 + ID_0;            // SMCLK divided by 1, Up
     TA0CCR0  = 255;                         // Sets CCR0 to 255
     TA0CCTL1 = OUTMOD_7;                        // Reset or Set behavior
@@ -126,7 +126,6 @@ void __attribute__ ((interrupt(USCIAB0RX_VECTOR))) USCI0RX_ISR (void)
 #endif
 {
     while (!(IFG2&UCA0TXIFG));                // USCI_A0 TX buffer ready?
-    UCA0TXBUF = UCA0RXBUF;                    // TX -> RXed character
         switch(CurrentByte){
             case 0:
                 NumberOfBytes = UCA0RXBUF;      // first byte received
