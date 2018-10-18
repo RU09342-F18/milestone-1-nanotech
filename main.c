@@ -114,11 +114,6 @@ void TimerSetup()                       // Subject to change
  * Setting UART Interrupt
  */
 
-//#pragma vector=USCI_A0_VECTOR                 // Interrupt Vector definition
-//__interupt void USCI_A0_ISR(void)             // Interrupt function deceleration
-
-//#pragma vector=USCIAB0RX_VECTOR
-//__interrupt void USCI0RX_ISR(void)
 #if defined(__TI_COMPILER_VERSION__) || defined(__IAR_SYSTEMS_ICC__)
 #pragma vector=USCIAB0RX_VECTOR
 __interrupt void USCI0RX_ISR(void)
