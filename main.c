@@ -47,22 +47,22 @@ int CurrentByte = 0;
 
 int main(void)
 {
-	WDTCTL = WDTPW | WDTHOLD;				// Stop watchdog timer
+    WDTCTL = WDTPW | WDTHOLD;				// Stop watchdog timer
 	UARTSetup();                           	// UARTSetup Function
     LEDSetup();                             // LEDSetup Function
 	//TestCode();                           // TestCode Function
-
-	__bis_SR_register(LPM0_bits + GIE); 	// Low-Power Mode 0 and Global Interrupt Enable
+    UCA0TXBUF = 0xAA;
+    __bis_SR_register(GIE);
+    while(1);
 
 	return 0;
 }
-
 
 /*
  * Setting UART
  */
 
-void UARTSetup()                            // Code from Lab 0 example code
+void UARTSetup()                           // Code from Lab 0 example code
 {
 	DCOCTL = 0;                           	// Select lowest DCOx and MODx settings
 	BCSCTL1 = CALBC1_1MHZ;                  // Set DCO
@@ -73,6 +73,9 @@ void UARTSetup()                            // Code from Lab 0 example code
 	UCA0MCTL = UCBRS0;                      // Modulation UCBRSx = 1
 	UCA0CTL1 &= ~UCSWRST;                   // Initialize USCI state machine
 	IE2 |= UCA0RXIE;                        // Enable USCI_A0 RX interrupt
+	//From Lab 0 Example
+	  P1SEL = BIT1 + BIT2 ;                     // P1.1 = RXD, P1.2=TXD
+	  P1SEL2 = BIT1 + BIT2 ;                    // P1.1 = RXD, P1.2=TXD
 }
 
 
@@ -82,12 +85,14 @@ void UARTSetup()                            // Code from Lab 0 example code
 
 void LEDSetup()
 {
-    P2DIR |= RedLED;                       	// P2.3 to output
-    P2SEL |= RedLED;                        // P2.3 to TA0.1
-    P2DIR |= GreenLED;                      // P2.4 to output
-    P2SEL |= GreenLED;                      // P2.4 to TA0.2
-    P2DIR |= BlueLED;                       // P2.5 to output
-    P2SEL |= BlueLED;                       // P2.5 to TA0.3
+    P1DIR |= RedLED;                       	// P1.6 to output
+    P1SEL |= RedLED;                        // P1.6 to TA0.1
+    P1SEL2 = 0x00;
+    P2DIR |= GreenLED;                      // P2.1 to output
+    P2SEL |= GreenLED;                      // P2.1 to TA0.2
+    P2SEL2 = 0x00;
+    P2DIR |= BlueLED;                       // P2.4 to output
+    P2SEL |= BlueLED;                       // P2.4 to TA0.3
 }
 
 
@@ -117,7 +122,7 @@ void TimerSetup(int rate)                  	// Subject to change
 
 #pragma vector=USCIAB0RX_VECTOR
 __interrupt void USCI0RX_ISR(void)
-{       
+{
     while (!(IFG2&UCA0TXIFG)){              // USCI_A0 TX buffer ready?
 
           switch(CurrentByte){
@@ -162,14 +167,14 @@ void TestCode()
 	P1OUT |= Btn;                           // Set the initial value of port 1.3 as "1"
 
 	while(1)                                // Start an infinite while loop.
-    {                   
+    {
 		if(!PnB && !i)                      // If the button is pushed and the boolean is false
-        {         
+        {
 					P1OUT ^= LED;           // Flip the value of the LED
 					i = 1;                  // Flip the Value of the Boolean
 		}
 		else if(PnB && i)                   // If the button is pushed and the boolean is true
-        {     
+        {
 				   i = 0;                   // Set the Boolean to be true
 	    }
 
