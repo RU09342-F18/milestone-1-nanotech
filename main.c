@@ -123,28 +123,28 @@ void TimerSetup(int rate)                  		// Subject to change
 #pragma vector=USCIAB0RX_VECTOR
 __interrupt void USCI0RX_ISR(void)
 {
-    while (!(IFG2&UCA0TXIFG));              // USCI_A0 TX buffer ready?
+    while (!(IFG2&UCA0TXIFG));              	// USCI_A0 TX buffer ready?
 
         switch(CurrentByte){
-          case 0:
-              NumberOfBytes = UCA0RXBUF;    // first byte received
-              break;
-          case 1:
-              TA0CCR1 = 255 - UCA0RXBUF;    // red LED value
-              break;
-          case 2:
-              TA1CCR1 = 255 -UCA0RXBUF;     	// green LED value
-              break;
-          case 3:
-              TA1CCR2 = 255 - UCA0RXBUF;      	// blue LED value
-              UCA0TXBUF = NumberOfBytes - 3; 	// send new numBytes
-              break;
-          default:
-              if(CurrentByte<NumberOfBytes){
-                  UCA0TXBUF = UCA0RXBUF;		// send remaining bytes
-              }
-          }
-          CurrentByte++;
+          	case 0:
+              	NumberOfBytes = UCA0RXBUF;    	// first byte received
+              	break;
+          	case 1:
+              	TA0CCR1 = 255 - UCA0RXBUF;    	// red LED value
+              	break;
+          	case 2:
+              	TA1CCR1 = 255 -UCA0RXBUF;     	// green LED value
+              	break;
+          	case 3:
+              	TA1CCR2 = 255 - UCA0RXBUF;      // blue LED value
+              	UCA0TXBUF = NumberOfBytes - 3; 	// send new numBytes
+              	break;
+          	default:
+              	if(CurrentByte<NumberOfBytes){
+                  	UCA0TXBUF = UCA0RXBUF;		// send remaining bytes
+              	}
+          	}
+        CurrentByte++;
 
 }
 
