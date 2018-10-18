@@ -32,7 +32,7 @@ typedef int bool;
 #define GreenLED    BIT1;
 #define BlueLED     BIT4;
 
-volatile int ByteCount = 0;
+// volatile int ByteCount = 0;
 
 void UARTSetup();
 void LEDSetup();
@@ -47,10 +47,10 @@ int CurrentByte = 0;
 
 int main(void)
 {
-    WDTCTL = WDTPW | WDTHOLD;				// Stop watchdog timer
-	UARTSetup();                           	// UARTSetup Function
-    LEDSetup();                             // LEDSetup Function
-	//TestCode();                           // TestCode Function
+    WDTCTL = WDTPW | WDTHOLD;					// Stop watchdog timer
+	UARTSetup();                           		// UARTSetup Function
+    LEDSetup();                             	// LEDSetup Function
+	//TestCode();                           	// TestCode Function
     UCA0TXBUF = 0xAA;
     __bis_SR_register(GIE);
     while(1);
@@ -62,20 +62,20 @@ int main(void)
  * Setting UART
  */
 
-void UARTSetup()                           // Code from Lab 0 example code
+void UARTSetup()                           		// Code from Lab 0 example code
 {
-	DCOCTL = 0;                           	// Select lowest DCOx and MODx settings
-	BCSCTL1 = CALBC1_1MHZ;                  // Set DCO
+	DCOCTL = 0;                           		// Select lowest DCOx and MODx settings
+	BCSCTL1 = CALBC1_1MHZ;                 		// Set DCO
 	DCOCTL = CALDCO_1MHZ;
-	UCA0CTL1 |= UCSSEL_2;                   // SMCLK
-	UCA0BR0 = 104;                          // 1MHz 9600
-	UCA0BR1 = 0;                            // 1MHz 9600
-	UCA0MCTL = UCBRS0;                      // Modulation UCBRSx = 1
-	UCA0CTL1 &= ~UCSWRST;                   // Initialize USCI state machine
-	IE2 |= UCA0RXIE;                        // Enable USCI_A0 RX interrupt
+	UCA0CTL1 |= UCSSEL_2;                   	// SMCLK
+	UCA0BR0 = 104;                          	// 1MHz 9600
+	UCA0BR1 = 0;                            	// 1MHz 9600
+	UCA0MCTL = UCBRS0;                      	// Modulation UCBRSx = 1
+	UCA0CTL1 &= ~UCSWRST;                   	// Initialize USCI state machine
+	IE2 |= UCA0RXIE;                        	// Enable USCI_A0 RX interrupt
 	//From Lab 0 Example
-	  P1SEL = BIT1 + BIT2 ;                     // P1.1 = RXD, P1.2=TXD
-	  P1SEL2 = BIT1 + BIT2 ;                    // P1.1 = RXD, P1.2=TXD
+	P1SEL = BIT1 + BIT2 ;                   	// P1.1 = RXD, P1.2 = TXD
+	P1SEL2 = BIT1 + BIT2 ;                  	// P1.1 = RXD, P1.2 = TXD
 }
 
 
@@ -85,14 +85,14 @@ void UARTSetup()                           // Code from Lab 0 example code
 
 void LEDSetup()
 {
-    P1DIR |= RedLED;                       	// P1.6 to output
-    P1SEL |= RedLED;                        // P1.6 to TA0.1
+    P1DIR |= RedLED;                       		// P1.6 to output
+    P1SEL |= RedLED;                        	// P1.6 to TA0.1
     P1SEL2 = 0x00;
-    P2DIR |= GreenLED;                      // P2.1 to output
-    P2SEL |= GreenLED;                      // P2.1 to TA0.2
+    P2DIR |= GreenLED;                      	// P2.1 to output
+    P2SEL |= GreenLED;                      	// P2.1 to TA0.2
     P2SEL2 = 0x00;
-    P2DIR |= BlueLED;                       // P2.4 to output
-    P2SEL |= BlueLED;                       // P2.4 to TA0.3
+    P2DIR |= BlueLED;                       	// P2.4 to output
+    P2SEL |= BlueLED;                       	// P2.4 to TA0.3
 
 }
 
@@ -101,10 +101,10 @@ void LEDSetup()
  * Setting Timer
  */
 
-void TimerSetup(int rate)                  	// Subject to change
+void TimerSetup(int rate)                  		// Subject to change
 {
 	CCTL0 = CCIE;
-	TA0CTL = TASSEL_2 + MC_1 + ID_0;        // SMCLK divided by 1, Up
+	TA0CTL = TASSEL_2 + MC_1 + ID_0;        	// SMCLK divided by 1, Up
 	TA0CCR0  = 0x00FF;                  	// Sets CCR0 to 255
 	TA0CCTL1 = OUTMOD_7; 					// Reset or Set behavior
 
@@ -138,7 +138,7 @@ __interrupt void USCI0RX_ISR(void)
               break;
           case 3:
               TA1CCR2 = 255 - UCA0RXBUF;      // blue LED value
-              UCA0TXBUF = NumberOfBytes - 3;       // send new numBytes
+              UCA0TXBUF = NumberOfBytes - 3; // send new numBytes
               break;
           default:
               if(CurrentByte<NumberOfBytes){
