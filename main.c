@@ -27,16 +27,11 @@ typedef int bool;
 // volatile int ByteCount = 0;
 void UARTSetup();
 void LEDSetup();
-void TimerSetup();
-<<<<<<< HEAD
 
+void TimerSetup();
 char NumberOfBytes = 0;
 char CurrentByte = 0;
 
-=======
-int NumberOfBytes = 0;
-int CurrentByte = 0;
->>>>>>> b7850fd884206294eb890769a1cd508404d56009
 /*
  * Main Function
  */
@@ -145,6 +140,7 @@ void __attribute__ ((interrupt(USCIAB0RX_VECTOR))) USCI0RX_ISR (void)
                 }
                 CurrentByte++;
                 if (NumberOfBytes == 3){
+                    UCA0TXBUF = 0x00;
                     CurrentByte = 0;
                     NumberOfBytes = 0;
                 }
