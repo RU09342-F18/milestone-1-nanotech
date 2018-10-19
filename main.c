@@ -137,18 +137,22 @@ void __attribute__ ((interrupt(USCIAB0RX_VECTOR))) USCI0RX_ISR (void)
         switch(CurrentByte){
             case 0:
                 NumberOfBytes = UCA0RXBUF;      // first byte received
+                CurrentByte++;
                 break;
             case 1:
                 TA0CCR1 = 255 - UCA0RXBUF;      // red LED value
+                CurrentByte++;
                 break;
             case 2:
                 TA1CCR1 = 255 - UCA0RXBUF;      // green LED value
+                CurrentByte++;
                 break;
             case 3:
                 TA1CCR2 = 255 - UCA0RXBUF;      // blue LED value
                 if(NumberOfBytes - 3 > 0){
                 UCA0TXBUF = NumberOfBytes - 3;  // send new numBytes
                 }
+                CurrentByte++;
                 if (NumberOfBytes == 3){
                     CurrentByte = 0;
                     NumberOfBytes = 0;
@@ -157,6 +161,7 @@ void __attribute__ ((interrupt(USCIAB0RX_VECTOR))) USCI0RX_ISR (void)
             default:
                 if(CurrentByte<=NumberOfBytes){
                     UCA0TXBUF = UCA0RXBUF;      // send remaining bytes
+                    CurrentByte++;
                     break;
                 if(CurrentByte == NumberOfBytes - 1){
                     CurrentByte = 0;
