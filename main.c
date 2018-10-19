@@ -76,13 +76,6 @@ void LEDSetup()
     P2SEL2 &= ~BlueLED;
     P2DIR |= BlueLED;                           // P2.4 to output
     P2SEL |= BlueLED;                           // P2.4 to TA0.3
-<<<<<<< HEAD
-
-    TA1CCTL2 = CCIE;
-    P1DIR |= BIT0;               //Set Port 1.0 as an output
-    P1OUT &= ~BIT0;              //Set the initial value of port 1.0 as "0"
-=======
->>>>>>> b7850fd884206294eb890769a1cd508404d56009
 }
 /*
  * Setting Timer
@@ -119,11 +112,7 @@ void __attribute__ ((interrupt(USCIAB0RX_VECTOR))) USCI0RX_ISR (void)
         switch(CurrentByte){
             case 0:
                 NumberOfBytes = UCA0RXBUF;      // first byte received
-<<<<<<< HEAD
-                CurrentByte++;
-=======
                 //UCA0TXBUF = UCA0RXBUF;      // Remove Later
->>>>>>> b7850fd884206294eb890769a1cd508404d56009
                 break;
             case 1:
                 TA0CCR1 = 255 - UCA0RXBUF;      // red LED value
@@ -148,24 +137,6 @@ void __attribute__ ((interrupt(USCIAB0RX_VECTOR))) USCI0RX_ISR (void)
             default:
                 if(CurrentByte<=NumberOfBytes){
                     UCA0TXBUF = UCA0RXBUF;      // send remaining bytes
-<<<<<<< HEAD
-                    CurrentByte++;
-                    break;
-                if(CurrentByte == NumberOfBytes - 1){
-                    CurrentByte = 0;
-                    NumberOfBytes = 0;
-                    break;
-                }
-
-                }
-        }
-
-
-}
-
-#pragma vector=TIMER1_A2_VECTOR
-__interrupt void Timer_A2 (void)
-=======
                 }else{
                     CurrentByte = 0;
                 }
@@ -175,7 +146,6 @@ __interrupt void Timer_A2 (void)
 /* LED Test Code
 P1.0 Will SWITCH when you push the button, use this to test LEDs
 void TestCode()
->>>>>>> b7850fd884206294eb890769a1cd508404d56009
 {
 
 
