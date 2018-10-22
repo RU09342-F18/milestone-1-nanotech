@@ -2,11 +2,13 @@
  * main.c for Milestone
  *
  *    Created on: October 10, 2018
- *   Last Edited:
+ *   Last Edited: October 18, 2018
  *        Author: Tyler M. and Helen P.
  *         Board: MSP430G2553
  */
+
 #include <msp430g2553.h>
+
 /*
 Test Code Definitions
 */
@@ -18,6 +20,8 @@ typedef int bool;
 #define true 1
 #define false 0
 */
+
+
 /*
  * Code Definition
  */
@@ -39,29 +43,31 @@ int main(void)
 {
     WDTCTL = WDTPW | WDTHOLD;                   // Stop watchdog timer
     UARTSetup();                                // UARTSetup Function
-    LEDSetup();                                 // LEDSetup Function
+    LEDSetup();                              	// LEDSetup Function
     TimerSetup();
     __bis_SR_register(GIE);
     while(1);
     return 0;
 }
+
 /*
  * Setting UART
  */
-void UARTSetup()                                // Code from Lab 0 example code
+void UARTSetup()								// Code from Lab 0 example code
 {
-    DCOCTL = 0;                               // Select lowest DCOx and MODx settings
-    BCSCTL1 = CALBC1_1MHZ;                    // Set DCO
+    DCOCTL = 0;                            		// Select lowest DCOx and MODx settings
+    BCSCTL1 = CALBC1_1MHZ;                   	// Set DCO
     DCOCTL = CALDCO_1MHZ;
-    P1SEL = BIT1 + BIT2 ;                     // P1.1 = RXD, P1.2=TXD
-    P1SEL2 = BIT1 + BIT2 ;                    // P1.1 = RXD, P1.2=TXD
-    UCA0CTL1 |= UCSSEL_2;                     // SMCLK
-    UCA0BR0 = 104;                            // 1MHz 9600
-    UCA0BR1 = 0;                              // 1MHz 9600
-    UCA0MCTL = UCBRS0;                        // Modulation UCBRSx = 1
-    UCA0CTL1 &= ~UCSWRST;                     // **Initialize USCI state machine**
-    IE2 |= UCA0RXIE;                          // Enable USCI_A0 RX interrupt
+    P1SEL = BIT1 + BIT2 ;                     	// P1.1 = RXD, P1.2=TXD
+    P1SEL2 = BIT1 + BIT2 ;                    	// P1.1 = RXD, P1.2=TXD
+    UCA0CTL1 |= UCSSEL_2;                     	// SMCLK
+    UCA0BR0 = 104;                            	// 1MHz 9600
+    UCA0BR1 = 0;                              	// 1MHz 9600
+    UCA0MCTL = UCBRS0;                        	// Modulation UCBRSx = 1
+    UCA0CTL1 &= ~UCSWRST;                     	// **Initialize USCI state machine**
+    IE2 |= UCA0RXIE;                          	// Enable USCI_A0 RX interrupt
 }
+
 /*
  * Setting LEDs
  */
@@ -77,14 +83,15 @@ void LEDSetup()
     P2DIR |= BlueLED;                           // P2.4 to output
     P2SEL |= BlueLED;                           // P2.4 to TA0.3
 }
+
 /*
  * Setting Timer
  */
-void TimerSetup()                       // Subject to change
+void TimerSetup()                       		// Subject to change
 {
     //CCTL0 = CCIE;
     TA0CTL = TASSEL_2 + MC_1 + ID_0;            // SMCLK divided by 1, Up
-    TA0CCR0  = 255;                         // Sets CCR0 to 255
+    TA0CCR0  = 255;                         	// Sets CCR0 to 255
     TA0CCTL1 = OUTMOD_7;                        // Reset or Set behavior
     TA1CTL = TASSEL_2 + MC_1 + ID_0;            // SMCLK divided by 1, Up
     TA1CCR0  = 0x00FF;                          // Sets CCR0 to 255
@@ -95,6 +102,7 @@ void TimerSetup()                       // Subject to change
     TA1CCR1 = 0x00FF;
     TA1CCR2 = 0x00FF;
 }
+
 /*
  * Setting UART Interrupt
  */
@@ -107,12 +115,12 @@ void __attribute__ ((interrupt(USCIAB0RX_VECTOR))) USCI0RX_ISR (void)
 #error Compiler not supported!
 #endif
 {
-    while (!(IFG2&UCA0TXIFG));                // USCI_A0 TX buffer ready?
+    while (!(IFG2&UCA0TXIFG));                	// USCI_A0 TX buffer ready?
     //UCA0TXBUF = UCA0RXBUF;                    // TX -> RXed character
         switch(CurrentByte){
             case 0:
                 NumberOfBytes = UCA0RXBUF;      // first byte received
-                //UCA0TXBUF = UCA0RXBUF;      // Remove Later
+                //UCA0TXBUF = UCA0RXBUF;      	// Remove Later
                 break;
             case 1:
                 TA0CCR1 = 255 - UCA0RXBUF;      // red LED value
@@ -143,6 +151,7 @@ void __attribute__ ((interrupt(USCIAB0RX_VECTOR))) USCI0RX_ISR (void)
             }
         CurrentByte++;
 }
+
 /* LED Test Code
 P1.0 Will SWITCH when you push the button, use this to test LEDs
 void TestCode()
