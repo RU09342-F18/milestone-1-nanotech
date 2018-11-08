@@ -5,6 +5,8 @@
 */.launches/*
 */Debug/*
 */Release/*
+/targetConfigs/*
+/.settings/*
 
 *.launches/*
 *.settings/*
